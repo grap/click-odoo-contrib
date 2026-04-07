@@ -128,6 +128,11 @@ click-odoo-initdb (stable)
     --unless-initialized            If database exists and is initialized, do
                                     nothing and exit without error, else create
                                     and/or initialize it.
+    --load/--no-load                Enable the load of server wide modules during
+                                    the installation.
+                                    The list of the modules to load is defined in
+                                    the configuration file, in the 'server_wide_modules'
+                                    value of the 'options' section.
     --help                          Show this message and exit.
 
 click-odoo-backupdb (beta)

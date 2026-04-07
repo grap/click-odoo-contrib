@@ -67,8 +67,11 @@ def odoo_createdb(
     exists,
     *,
     force_db_storage_persistent=False,
+    load_server_wide_modules=False,
 ):
     with _patch_ir_attachment_store(force_db_storage):
+        if load_server_wide_modules:
+            odoo.service.server.load_server_wide_modules()
         if not exists:
             odoo.service.db._create_empty_database(dbname)
         if odoo.release.version_info >= (19, 0):
@@ -343,6 +346,14 @@ class DbCache:
     "--demo/--no-demo", default=True, show_default=True, help="Load Odoo demo data."
 )
 @click.option(
+    "--load/--no-load",
+    default=False,
+    show_default=True,
+    help="Enable the load of service wide modules during the installation."
+    " The list of the modules to load is defined in the configuration file"
+    " in the 'server_wide_modules' value of the 'options' section.",
+)
+@click.option(
     "--cache/--no-cache",
     default=True,
     show_default=True,
@@ -415,6 +426,7 @@ def main(
     new_database,
     modules,
     demo,
+    load,
     cache,
     cache_prefix,
     cache_max_age,
@@ -481,6 +493,7 @@ def main(
                 force_db_storage=attachments_in_db or attachments_in_db_persistent,
                 force_db_storage_persistent=attachments_in_db_persistent,
                 exists=exists,
+                load_server_wide_modules=load,
             )
         else:
             _logger.info(
@@ -508,6 +521,7 @@ def main(
                         force_db_storage=True,
                         force_db_storage_persistent=attachments_in_db_persistent,
                         exists=exists,
+                        load_server_wide_modules=load,
                     )
                     dbcache.add(new_database, hashsum)
             if cache_max_size >= 0:
