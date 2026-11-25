@@ -349,7 +349,7 @@ class DbCache:
     "--load/--no-load",
     default=False,
     show_default=True,
-    help="Enable the load of service wide modules during the installation."
+    help="Enable the load of server wide modules during the installation."
     " The list of the modules to load is defined in the configuration file"
     " in the 'server_wide_modules' value of the 'options' section.",
 )
@@ -471,18 +471,18 @@ def main(
                 msg = "Database already initialized: {}".format(new_database)
                 click.echo(click.style(msg, fg="yellow"))
                 return
-            else:
-                raise click.ClickException(
-                    "Database already exists and initialized: {}".format(new_database)
-                )
+            # else:
+            #     raise click.ClickException(
+            #         "Database already exists and initialized: {}".format(new_database)
+            #     )
         else:
             # not initialized
             if unless_initialized:
                 pass  # continue with initialization
-            else:
-                raise click.ClickException(
-                    "Database already exists: {}".format(new_database)
-                )
+            # else:
+            #     raise click.ClickException(
+            #         "Database already exists: {}".format(new_database)
+            #     )
     module_names = [m.strip() for m in modules.split(",")]
     if not cache:
         if new_database:
